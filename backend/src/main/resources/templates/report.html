@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 9px;
+            margin: 0;
+        }
+
+        /* ================= HEADER (RUNNING) ================= */
+        #header {
+            position: running(header);
+        }
+
+        /* ================= FOOTER ================= */
+        #footer-left {
+            position: running(footer-left);
+            font-size: 9px;
+        }
+
+        #footer-right {
+            position: running(footer-right);
+            font-size: 9px;
+            text-align: right;
+        }
+
+        .pageNumber:before {
+            content: counter(page);
+        }
+
+        /* ================= PAGE ================= */
+        @page {
+            size: A4;
+            margin: 35mm 15mm 25mm 15mm;
+
+            @top-center {
+                content: element(header);
+            }
+
+            @bottom-left {
+                content: element(footer-left);
+                border-top: 1px solid black;
+                padding-top: 5px;
+            }
+
+            @bottom-right {
+                content: element(footer-right);
+                border-top: 1px solid black;
+                padding-top: 5px;
+            }
+        }
+
+        /* ================= HEADER STYLE ================= */
+        .header-container {
+            text-align: center;
+        }
+
+        .header-container img {
+            height: 50px;
+        }
+
+        .title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        hr {
+            margin: 6px 0;
+            border: 1px solid black;
+        }
+
+        /* ================= TABLE ================= */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        thead {
+            display: table-header-group;
+        }
+
+        th, td {
+            border: 1px solid #999;
+            padding: 4px;
+            vertical-align: top;
+            overflow-wrap: break-word;
+        }
+
+        th {
+            background-color: #2c5aa0;
+            color: white;
+            font-size: 10px;
+            text-align: center;
+        }
+
+        tr {
+            page-break-inside: avoid;
+        }
+
+        /* ================= COLUMN WIDTHS (ADJUSTED) ================= */
+        .col-stretch {
+            width: 22%;
+        }
+
+        .col-tag {
+            width: 10%;
+        }
+
+        .col-location {
+            width: 28%;
+        }
+
+        .col-status {
+            width: 10%;
+        }
+
+        .col-remark {
+            width: 30%;
+        }
+
+        /* ================= STATUS ================= */
+        .down {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .ok {
+            color: green;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* ================= REMARK ================= */
+        .remark {
+            font-size: 8px;
+            line-height: 1.2;
+        }
+
+        .remark div {
+            margin-bottom: 2px;
+        }
+
+        /* ================= ROW STRIPES ================= */
+        tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<!-- ================= RUNNING HEADER ================= -->
+<div style="position: absolute; top: -1000px;">
+    <div id="header">
+        <div class="header-container">
+            <img src="images/logo.png"/>
+            <div class="title">
+                Network Device Ping Report -
+                <span th:text="${projectName}"></span>
+            </div>
+        </div>
+        <hr/>
+    </div>
+</div>
+
+<!-- ================= FOOTER ================= -->
+<div style="position: absolute; top: -1000px;">
+    <div id="footer-left">
+        Report Generated on:
+        <span th:text="${generatedTime}"></span>
+    </div>
+
+    <div id="footer-right">
+        Page <span class="pageNumber"></span>
+    </div>
+</div>
+
+<!-- ================= TABLE ================= -->
+<table>
+    <thead>
+    <tr>
+        <th class="col-stretch">Stretch</th>
+        <th class="col-tag" th:text="${tagLabel}"></th>
+        <th class="col-location">Location</th>
+        <th class="col-status">Status</th>
+        <th class="col-remark">Remark (Non Pingable IPs)</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="r : ${reportEntities}">
+
+        <td class="col-stretch" th:text="${r.stretch}"></td>
+
+        <td class="col-tag" th:text="${r.tag}"></td>
+
+        <td class="col-location" th:text="${r.location}"></td>
+
+        <td th:class="${r.status == 'DOWN'} ? 'down' : 'ok'"
+            th:text="${r.status}">
+        </td>
+
+        <td class="col-remark remark">
+            <div th:if="${#lists.isEmpty(r.failedDevices)}">All OK</div>
+
+            <div th:each="f : ${r.failedDevices}"
+                 th:if="${!#lists.isEmpty(r.failedDevices)}">
+                <span th:text="${f}"></span>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

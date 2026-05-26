@@ -1,0 +1,54 @@
+/* === TAILWIND CORE === */
+@import "tailwindcss";
+
+/* === THEME CONFIGURATION === */
+@theme {
+  /* Future brand-specific overrides or custom variable definitions */
+}
+
+/* === BASE STYLES === */
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900 antialiased;
+    background-image: radial-gradient(circle at 50% -20%, #e0f2fe 0%, #f8fafc 100%);
+    min-height: 100vh;
+  }
+}
+
+/* === CUSTOM UTILITIES === */
+@layer utilities {
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-md border border-white/50 shadow-sm rounded-xl;
+  }
+  
+  .pulse-red {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+    animation: pulse-red 2s infinite;
+  }
+}
+
+/* === KEYFRAMES & ANIMATIONS === */
+@keyframes pulse-red {
+  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+  70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+/* === BROWSER SCROLLBAR CONFIGURATION === */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

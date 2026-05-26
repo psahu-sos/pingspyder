@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+gunicorn
+pymongo
+pandas
+openpyxl
+python-dotenv
+ping3
+apscheduler
+python-multipart
