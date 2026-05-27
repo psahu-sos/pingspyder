@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { 
   Search, Bell, User, Settings, LogOut, ChevronRight, Clock, Calendar, Moon, Sun, ArrowLeft, Check, Activity, LineChart, Users 
@@ -13,9 +13,11 @@ const Header = () => {
   const isAnalyticsPage = location.pathname === '/analytics';
   const isUserManagementPage = location.pathname === '/user-management'; 
   
-  const { notifications, unreadCount, clearNotifications } = useNotifications();
+  const { notifications, clearNotifications } = useNotifications();
   const { primaryColor, setPrimaryColor, isDarkMode, setIsDarkMode } = useTheme();
-  const { searchQuery, setSearchQuery } = useData();
+  
+  // Fetch activeFilters along with networkData and searchQuery
+  const { networkData, searchQuery, setSearchQuery, activeFilters } = useData(); 
   const { authUser, logout } = useAuth(); 
 
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -26,7 +28,37 @@ const Header = () => {
   const dropdownRef = useRef(null);
   const notifRef = useRef(null);
 
-  // UI Configuration for Theme Options (Not dummy data)
+  // 🔥 FILTER LOGIC ADDED HERE TO SYNC WITH DASHBOARD TABLE 🔥
+  const displayedData = useMemo(() => {
+    if (!networkData) return [];
+    let filtered = networkData;
+
+    if (activeFilters && activeFilters.length > 0) {
+      filtered = filtered.filter(node => 
+        activeFilters.some(filter => 
+          (node.tag && node.tag.toUpperCase() === filter.toUpperCase()) || 
+          (node.remarks && node.remarks.toUpperCase().includes(filter.toUpperCase()))
+        )
+      );
+    }
+
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(node =>
+        (node.stretch && node.stretch.toLowerCase().includes(query)) ||
+        (node.location && node.location.toLowerCase().includes(query)) ||
+        (node.tag && node.tag.toLowerCase().includes(query)) ||
+        (node.status && node.status.toLowerCase().includes(query))
+      );
+    }
+
+    return filtered;
+  }, [networkData, searchQuery, activeFilters]);
+
+  // Use dynamically filtered data to count offline nodes for the Bell icon
+  const offlineNodes = displayedData.filter(n => n.status === 'DOWN' || n.status === 'CRITICAL FAIL' || n.status === 'PARTIAL').length;
+
+  // UI Configuration for Theme Options
   const THEME_COLORS = [
     { name: 'Blue', value: '#0052FF' },
     { name: 'Purple', value: '#7C3AED' },
@@ -101,11 +133,23 @@ const Header = () => {
       {/* Right Section: Notifications & Profile */}
       <div className="flex items-center gap-6">
         
-        {/* Notifications Dropdown */}
+        {/* Notifications Dropdown (Synced with Search) */}
         <div className="relative" ref={notifRef}>
-          <button onClick={() => setShowNotif(!showNotif)} className={`w-11 h-11 flex items-center justify-center rounded-xl border transition-all relative group ${isDarkMode ? 'border-slate-700 text-slate-400 hover:bg-slate-800' : 'border-slate-100 text-slate-400 hover:bg-slate-50'}`} style={{ ':hover': { color: primaryColor } }}>
-            <Bell className="w-5 h-5 transition-transform group-hover:rotate-12" />
-            {unreadCount > 0 && <span className="absolute top-2.5 right-2.5 w-4 h-4 bg-red-500 border-2 border-white text-white text-[9px] font-black rounded-full flex items-center justify-center">{unreadCount}</span>}
+          <button 
+            onClick={() => setShowNotif(!showNotif)} 
+            className={`flex items-center justify-center w-11 h-11 rounded-[14px] border shadow-sm transition-all relative group ${
+              offlineNodes > 0 
+                ? (isDarkMode ? 'bg-red-500/10 border-red-500/50 hover:bg-red-500/20' : 'bg-red-50 border-red-200 hover:bg-red-100') 
+                : (isDarkMode ? 'bg-slate-800 border-slate-700 hover:bg-slate-700' : 'bg-white border-slate-200 hover:bg-slate-50')
+            }`}
+          >
+            <Bell className={`w-5 h-5 transition-transform group-hover:rotate-12 ${offlineNodes > 0 ? 'text-red-500 animate-pulse' : (isDarkMode ? 'text-slate-400' : 'text-slate-500')}`} />
+            
+            {offlineNodes > 0 && (
+              <span className={`absolute -top-1.5 -right-1.5 flex h-[22px] w-[22px] items-center justify-center rounded-full bg-red-500 text-[10px] font-black text-white shadow-md border-[2px] ${isDarkMode ? 'border-[#1E293B]' : 'border-white'}`}>
+                {offlineNodes}
+              </span>
+            )}
           </button>
 
           {showNotif && (
