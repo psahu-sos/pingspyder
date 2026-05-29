@@ -28,7 +28,7 @@ git clone <repository-url>
 # Navigate to Project
 
 ```bash
-cd pingspyder-service
+cd pingspyder
 ```
 
 ---
@@ -102,13 +102,13 @@ uvicorn app.main:app --reload
 ## Swagger UI
 
 ```text
-http://localhost:8000/pingspyder-service/docs
+http://localhost:8000/pingspyder/docs
 ```
 
 ## ReDoc
 
 ```text
-http://localhost:8000/pingspyder-service/redoc
+http://localhost:8000/pingspyder/redoc
 ```
 
 ---

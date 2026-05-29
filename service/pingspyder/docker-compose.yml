@@ -2,11 +2,11 @@ version: "3.9"
 
 services:
 
-  pingspyder-service:
+  pingspyder:
 
     build: ..
 
-    container_name: pingspyder-service
+    container_name: pingspyder
 
     ports:
       - "8000:8000"

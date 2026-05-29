@@ -42,7 +42,7 @@ The following software must be installed on the server:
 # Create Project Directory
 
 ```bash
-mkdir -p /opt/pingspyder-service
+mkdir -p /opt/pingspyder
 ```
 
 ---
@@ -58,7 +58,7 @@ git clone <repository-url>
 # Navigate to Project
 
 ```bash
-cd pingspyder-service
+cd pingspyder
 ```
 
 ---
@@ -152,7 +152,7 @@ server {
 
 ```bash
 sudo ln -s \
-/etc/nginx/sites-available/pingspyder-service \
+/etc/nginx/sites-available/pingspyder \
 /etc/nginx/sites-enabled/
 ```
 
@@ -177,19 +177,19 @@ sudo systemctl daemon-reload
 ## Enable Service
 
 ```bash
-sudo systemctl enable pingspyder-service
+sudo systemctl enable pingspyder
 ```
 
 ## Start Service
 
 ```bash
-sudo systemctl start pingspyder-service
+sudo systemctl start pingspyder
 ```
 
 ## Service Status
 
 ```bash
-sudo systemctl status pingspyder-service
+sudo systemctl status pingspyder
 ```
 
 ---
@@ -205,7 +205,7 @@ logs/application.log
 ## Linux Service Logs
 
 ```bash
-journalctl -u pingspyder-service -f
+journalctl -u pingspyder -f
 ```
 
 ---
@@ -231,13 +231,13 @@ curl http://localhost:8000/api/v1/monitoring/health
 ## Swagger UI
 
 ```text
-http://localhost:8000/pingspyder-service/docs
+http://localhost:8000/pingspyder/docs
 ```
 
 ## ReDoc
 
 ```text
-http://localhost:8000/pingspyder-service/redoc
+http://localhost:8000/pingspyder/redoc
 ```
 
 ---

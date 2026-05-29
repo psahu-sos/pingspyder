@@ -23,7 +23,7 @@
     <!-- WAR Packaging -->
     <packaging>war</packaging>
 
-    <name>pingspyder-backend</name>
+    <name>pingspyder</name>
     <description>Ping Spyder Backend Application</description>
 
     <!-- Java Version -->
@@ -37,6 +37,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- Servlet API -->
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <!-- MongoDB -->
@@ -123,11 +130,6 @@
 
         <!-- Embedded Tomcat -->
         <!-- Keep without provided scope for local execution -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-            <!--            <scope>provided</scope>-->
-        </dependency>
 
         <!-- Swagger UI/Open API -->
         <dependency>
@@ -141,7 +143,7 @@
     <build>
 
         <!-- Final WAR Name -->
-        <finalName>pingspyder-backend</finalName>
+        <finalName>pingspyder</finalName>
 
         <plugins>
 

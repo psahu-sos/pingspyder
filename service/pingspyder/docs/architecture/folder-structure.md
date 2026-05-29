@@ -9,7 +9,7 @@ PingSpyder Service follows a modular and layered folder structure for scalabilit
 # Root Structure
 
 ```text
-pingspyder-service/
+pingspyder/
 │
 ├── app/
 ├── docs/

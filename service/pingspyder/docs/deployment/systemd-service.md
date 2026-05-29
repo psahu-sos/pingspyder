@@ -13,7 +13,7 @@ PingSpyder Service can be managed as a Linux systemd service for:
 # Service File Location
 
 ```text
-/etc/systemd/system/pingspyder-service.service
+/etc/systemd/system/pingspyder.service
 ```
 
 ---
@@ -29,9 +29,9 @@ After=network.target
 
 User=root
 
-WorkingDirectory=/opt/pingspyder-service
+WorkingDirectory=/opt/pingspyder
 
-ExecStart=/opt/pingspyder-service/venv/bin/gunicorn \
+ExecStart=/opt/pingspyder/venv/bin/gunicorn \
           app.main:app \
           -k uvicorn.workers.UvicornWorker \
           --workers 4 \
@@ -56,7 +56,7 @@ sudo systemctl daemon-reload
 # Enable Service
 
 ```bash
-sudo systemctl enable pingspyder-service
+sudo systemctl enable pingspyder
 ```
 
 ---
@@ -64,7 +64,7 @@ sudo systemctl enable pingspyder-service
 # Start Service
 
 ```bash
-sudo systemctl start pingspyder-service
+sudo systemctl start pingspyder
 ```
 
 ---
@@ -72,7 +72,7 @@ sudo systemctl start pingspyder-service
 # Stop Service
 
 ```bash
-sudo systemctl stop pingspyder-service
+sudo systemctl stop pingspyder
 ```
 
 ---
@@ -80,7 +80,7 @@ sudo systemctl stop pingspyder-service
 # Restart Service
 
 ```bash
-sudo systemctl restart pingspyder-service
+sudo systemctl restart pingspyder
 ```
 
 ---
@@ -88,7 +88,7 @@ sudo systemctl restart pingspyder-service
 # Service Status
 
 ```bash
-sudo systemctl status pingspyder-service
+sudo systemctl status pingspyder
 ```
 
 ---
@@ -96,7 +96,7 @@ sudo systemctl status pingspyder-service
 # Service Logs
 
 ```bash
-journalctl -u pingspyder-service -f
+journalctl -u pingspyder -f
 ```
 
 ---
