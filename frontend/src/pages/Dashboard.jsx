@@ -383,10 +383,10 @@ const Dashboard = () => {
     const tableRows = [];
 
     displayedData.forEach((node, i) => {
-      // Setup the Individual IPs formatting (New Line Separated just like PDF)
+      // Setup the Individual IPs formatting (Clean IP Only)
       const individualIpsText = node.failedList && node.failedList.length > 0
-        ? node.failedList.map(d => `${d} : DOWN`).join('\n')
-        : node.remarks;
+        ? node.failedList.map(d => d.replace(/ : DOWN/gi, '').replace(/: DOWN/gi, '').trim()).join('\n')
+        : node.remarks.replace(/ : DOWN/gi, '').replace(/: DOWN/gi, '').trim();
 
       tableRows.push([
         (i + 1).toString(),
@@ -406,7 +406,6 @@ const Dashboard = () => {
       headStyles: { fillColor: [0, 82, 255], textColor: 255, fontSize: 9, fontStyle: 'bold' },
       bodyStyles: { fontSize: 8, cellPadding: 2 },
       columnStyles: {
-        // Ensure that newlines render correctly as block text for IPs
         5: { cellWidth: 'auto', whiteSpace: 'pre-line' } 
       },
       didParseCell: function(data) {
@@ -420,29 +419,28 @@ const Dashboard = () => {
             data.cell.styles.fontStyle = 'bold';
           }
         }
-        // Individual IPs Status Column (Index 5)
-        if (data.section === 'body' && data.column.index === 5) {
-          if (data.cell.raw.includes('DOWN')) {
-            data.cell.styles.textColor = [239, 68, 68]; // Highlight Failed IP strings
-          }
-        }
       }
     });
 
     const fileName = `Network_Device_Ping_Report_${new Date().getTime()}.pdf`;
     const pdfBlob = doc.output('blob');
     const pdfUrl = URL.createObjectURL(pdfBlob);
+    
+    // 🔥 Download PDF regardless of mode
     doc.save(fileName);
 
-    const newArchive = {
-      id: Date.now(),
-      name: fileName,
-      size: `${(pdfBlob.size / 1024).toFixed(1)}KB`,
-      date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
-      blobUrl: pdfUrl 
-    };
-    
-    setArchives([newArchive, ...archives].slice(0, 10)); 
+    // 🔥 Only save to Archives if it is Auto Mode
+    if (isAutoMode) {
+      const newArchive = {
+        id: Date.now(),
+        name: fileName,
+        size: `${(pdfBlob.size / 1024).toFixed(1)}KB`,
+        date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+        blobUrl: pdfUrl 
+      };
+      
+      setArchives([newArchive, ...archives].slice(0, 10)); 
+    }
   };
 
   const handleDownloadPreview = () => {
@@ -653,12 +651,14 @@ const Dashboard = () => {
                       {node.failedList && node.failedList.length > 0 ? (
                          <ul className="text-[10px] font-bold text-red-500 list-none space-y-1">
                            {node.failedList.map((failedItem, fIdx) => (
-                             <li key={fIdx} className="truncate break-words">{failedItem} : DOWN</li>
+                             <li key={fIdx} className="truncate break-words">
+                               {failedItem.replace(/ : DOWN/gi, '').replace(/: DOWN/gi, '').trim()}
+                             </li>
                            ))}
                          </ul>
                       ) : (
                          <span className={`text-[10px] font-bold ${node.status === 'DOWN' || node.status === 'CRITICAL FAIL' ? 'text-red-500' : 'text-slate-500'}`}>
-                           {node.remarks}
+                           {node.remarks.replace(/ : DOWN/gi, '').replace(/: DOWN/gi, '').trim()}
                          </span>
                       )}
                     </div>
@@ -688,7 +688,7 @@ const Dashboard = () => {
               <div className="p-2 rounded-lg" style={{ backgroundColor: `${primaryColor}20` }}>
                  <FileText className="w-4 h-4" style={{ color: primaryColor }} />
               </div>
-              <h3 className={`text-xs font-black uppercase tracking-widest ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`}>Recent NOC Archives (Top 10)</h3>
+              <h3 className={`text-xs font-black uppercase tracking-widest ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`}>Recent NOC Archives (Auto-Sync Runs Only)</h3>
             </div>
             
             <div className="p-2">
@@ -721,7 +721,7 @@ const Dashboard = () => {
                   </div>
                 </div>
               )) : (
-                 <p className="text-xs font-bold text-slate-400 italic py-8 text-center">No archived reports available.</p>
+                 <p className="text-xs font-bold text-slate-400 italic py-8 text-center">No auto-sync reports archived yet.</p>
               )}
             </div>
           </div>

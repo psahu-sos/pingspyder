@@ -25,7 +25,7 @@ Navigate to the project root directory before starting the application.
 ## Example
 
 ```bash
-cd pingspyder-service
+cd pingspyder
 ```
 
 Run:
@@ -162,7 +162,7 @@ Verify application startup.
 ## Swagger URL
 
 ```text
-http://localhost:8000/pingspyder-service/docs
+http://localhost:8000/pingspyder/docs
 ```
 
 ---
@@ -275,7 +275,7 @@ tail -f logs/application.log
 ## Linux Service Logs
 
 ```bash
-journalctl -u pingspyder-service -f
+journalctl -u pingspyder -f
 ```
 
 ---

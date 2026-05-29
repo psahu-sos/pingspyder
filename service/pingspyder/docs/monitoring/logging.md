@@ -152,7 +152,7 @@ tail -f logs/application.log
 # Linux Service Logs
 
 ```bash
-journalctl -u pingspyder-service -f
+journalctl -u pingspyder -f
 ```
 
 ---

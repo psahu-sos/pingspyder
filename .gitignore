@@ -1,0 +1,116 @@
+# ==========================================
+# IntelliJ / VS Code
+# ==========================================
+.idea/
+.vscode/
+*.iml
+
+# ==========================================
+# Java / Maven / Spring Boot
+# ==========================================
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# Maven Wrapper Logs
+.mvn/wrapper/maven-wrapper.jar
+
+# ==========================================
+# Python
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+venv/
+.venv/
+env/
+
+# Python Build
+build/
+dist/
+*.egg-info/
+
+# PyInstaller
+*.spec
+
+# Python Logs
+*.log
+
+# ==========================================
+# React / Node
+# ==========================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# React Build Output
+frontend/dist/
+frontend/build/
+
+# ==========================================
+# Environment Files
+# ==========================================
+.env
+.env.*
+!.env.example
+
+# ==========================================
+# Operating System Files
+# ==========================================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ==========================================
+# NSSM / Runtime Logs
+# ==========================================
+logs/
+*.out
+*.err
+
+# ==========================================
+# SonarQube
+# ==========================================
+.sonar/
+
+# ==========================================
+# Coverage Reports
+# ==========================================
+coverage/
+.coverage
+htmlcov/
+
+# ==========================================
+# Mongo Dumps / Backups
+# ==========================================
+dump/
+*.bson
+*.json
+
+# ==========================================
+# Temporary Files
+# ==========================================
+tmp/
+temp/
+
+# ==========================================
+# ZIP Files
+# ==========================================
+*.zip
+
+# ==========================================
+# Generated Python Build Artifacts
+# ==========================================
+service/pingspyder/build/
+service/pingspyder/dist/
+
+# ==========================================
+# Frontend Cache
+# ==========================================
+frontend/.vite/
+frontend/.cache/

@@ -30,9 +30,9 @@ app = FastAPI(
     title=APP_NAME,
     description="Network Analytics Engine",
     version="1.0.0",
-    docs_url="/pingspyder-service/docs",
-    redoc_url="/pingspyder-service/redoc",
-    openapi_url="/pingspyder-service/openapi.json"
+    docs_url="/pingspyder/docs",
+    redoc_url="/pingspyder/redoc",
+    openapi_url="/pingspyder/openapi.json"
 )
 
 # CORS
